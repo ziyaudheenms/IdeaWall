@@ -174,7 +174,7 @@ export default function Home() {
           {Categories.map((category) => (
             <button
               key={category.id}
-              className="px-4 py-2 bg-[#ECFDF4] rounded-lg text-[#059664] font-semibold hover:bg-[#059664] hover:text-white transition-colors
+              className="px-4 py-2 bg-[#ECFDF4] rounded-lg cursor-pointer text-[#059664] font-semibold hover:bg-[#059664] hover:text-white transition-colors
                 text-sm sm:text-xs md:text-sm
                 w-auto sm:w-[45%] md:w-auto
                 "
@@ -184,10 +184,10 @@ export default function Home() {
           ))}
         </div>
       </div>
-      <div className="px-3 mt-10">
+      <div className="lg:px-10 xl:px-10 md:px-10 sm:px-3 mt-10">
         <div className="flex items-center justify-between ">
           <h1 className="text-xl font-sans flex items-center justify-between">All Ideas</h1>
-          <Button className="bg-[#0FA76F]">
+          <Button className="bg-[#0FA76F] cursor-pointer">
             <Plus className="w-4 h-4 gap-2" />
             Add Idea
           </Button>
@@ -226,7 +226,7 @@ export default function Home() {
                   </div>
                   <div className="flex items-center justify-between mt-4 w-full">
                     <a href={idea.website_link} target="_blank" rel="noopener noreferrer">
-                      <Button className="w-full bg-[#ECFDF4] text-[#059664]  hover:bg-[#059664] hover:text-[#ECFDF4]">
+                      <Button className="w-full bg-[#ECFDF4] text-[#059664]  hover:bg-[#059664] cursor-pointer hover:text-[#ECFDF4]">
                         <SquareArrowOutUpRight className="w-4 h-4 " /> Visit Website
                       </Button>
                     </a>
