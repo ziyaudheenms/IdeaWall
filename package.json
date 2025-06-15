@@ -9,12 +9,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.4",
+    "@heroicons/react": "^2.2.0",
+    "@radix-ui/react-navigation-menu": "^1.2.13",
+    "@radix-ui/react-slot": "^1.2.3",
+    "@tabler/icons-react": "^3.34.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "icons-react": "^3.7.1",
+    "lucide-react": "^0.515.0",
+    "motion": "^12.18.1",
+    "next": "15.3.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.3.3"
+    "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4"
+    "tailwindcss": "^4",
+    "tw-animate-css": "^1.3.4"
   }
 }
