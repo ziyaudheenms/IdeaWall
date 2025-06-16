@@ -41,9 +41,9 @@ export default function Example() {
 
   return (
     <header className="bg-white">
-      <nav aria-label="Global" className="mx-auto flex w-full items-center justify-between p-6 lg:px-8">
+      <nav aria-label="Global" className="mx-auto flex w-full items-center justify-between p-6 lg:px-10 xl:px-20 md:px-10 sm:px-3 ">
         <div className="flex lg:flex-1">
-          <a href="#" className="-m-1.5 p-1.5">
+          <a href="/" className="-m-1.5 p-1.5">
             <span className="sr-only">IdeaWall</span>
             <h1 className='text-3xl font-bold font-sans bg-gradient-to-l text-transparent from-[#1a987c] to-[#79c244] bg-clip-text'>IdeaWall</h1>
           </a>

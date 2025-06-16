@@ -6,6 +6,7 @@ import { Heart } from 'lucide-react';
 import { SquareArrowOutUpRight } from 'lucide-react';
 import { CalendarRange } from 'lucide-react';
 import { Button } from "@/components/ui/button"
+import Link from "next/link";
 const Categories = [
   {
     id:1,
@@ -184,18 +185,21 @@ export default function Home() {
           ))}
         </div>
       </div>
-      <div className="lg:px-10 xl:px-10 md:px-10 sm:px-3 mt-10">
+      <div className="lg:px-10 xl:px-20 md:px-10 sm:px-3 mt-10">
         <div className="flex items-center justify-between ">
           <h1 className="text-xl font-sans flex items-center justify-between">All Ideas</h1>
-          <Button className="bg-[#0FA76F] cursor-pointer">
+          <Link href="/CreateIdea">
+          <Button className="bg-[#0FA76F] cursor-pointer hover:bg-[#059664] text-white font-semibold px-4 py-2 rounded-lg flex items-center gap-2" >
             <Plus className="w-4 h-4 gap-2" />
             Add Idea
           </Button>
+          </Link>
         </div>
         <div>
           <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-8">
             {IdeaCard.map((idea) => (
               <div key={idea.id} className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
+                 <Link href='/SinglePage' className="text-blue-600 hover:underline">
                 <div className="relative h-40 w-full">
                   <Image
                     src={idea.image}
@@ -203,12 +207,15 @@ export default function Home() {
                     fill
                     className="object-cover"
                   />
+                  
                 </div>
+                </Link>
                 <div className="p-4 flex-1 flex flex-col">
                   <div className="flex items-center gap-2 mb-2">
                     <Tag className="w-4 h-4 text-gray-400" />
                     <span className="text-xs text-gray-500">{idea.category}</span>
                   </div>
+                 
                   <div className="flex items-center justify-between gap-2">
                     <h2 className="text-lg font-semibold mb-2">{idea.title}</h2>
                     <div className="flex items-center gap-2">
