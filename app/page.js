@@ -11,6 +11,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 const Categories = [
   {
     id: 1,
@@ -98,6 +99,7 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [q, setq] = useState("");
   const [auther, setauther] = useState("");
+  const router = useRouter()
   const GetData = () => {
     axios
       .get("https://ideawall-backed.onrender.com/api/v1/Dashboard/viewAllPosts/")
