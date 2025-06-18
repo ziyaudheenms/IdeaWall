@@ -1,6 +1,7 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 const IdeaCard = {
   id: 1,
   title: "AI BASED TODO APP",
@@ -26,14 +27,15 @@ import { SquareArrowOutUpRight } from "lucide-react";
 import { Tag } from "lucide-react";
 import { CalendarRange } from "lucide-react";
 import Link from "next/link";
+import axios from "axios";
 
 function page() {
-  const [comments, setComments] = React.useState([
-    {
-      name: "Jane Smith",
-      text: "Great idea! Would love to see this in action.",
-    },
-  ]);
+  const [Data, setData] = useState({});
+  const [text, settext] = useState({});
+  const router = useRouter();
+  const [likes, setLikes] = React.useState(IdeaCard.likes);
+
+  const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = React.useState("");
 
   const handleCommentChange = (e) => {
@@ -42,129 +44,210 @@ function page() {
 
   const handleCommentSubmit = (e) => {
     e.preventDefault();
-    if (commentText.trim() === "") return;
-    setComments([
-      ...comments,
-      {
-        name: "Anonymous",
-        text: commentText,
-      },
-    ]);
-    toast.success("added comment successfully")
-    setCommentText("");
+    const ID = localStorage.getItem("ItemCardID");
+    const UserId = localStorage.getItem("Access_Token");
+    axios
+      .post(
+        `https://ideawall-backed.onrender.com/api/v1/Dashboard/comment/${ID}/`,
+        {
+          text: commentText,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${UserId}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      )
+      .then((res) => {
+        toast.success("comment added successfully");
+        console.log(res);
+
+        GetComments();
+      })
+      .catch((err) => {
+        toast.error("error occured ! login once again");
+        router.push("/Login")
+      });
   };
 
   // State for likes
-  const [likes, setLikes] = React.useState(IdeaCard.likes);
+
+  const GetData = () => {
+    const ID = localStorage.getItem("ItemCardID");
+    axios
+      .get(`https://ideawall-backed.onrender.com/api/v1/Dashboard/viewSinglePage/${ID}/`)
+      .then((responce) => {
+        console.log(responce.data.message);
+        setData(responce.data.message);
+        // setUserImage(responce.data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+        router.push("/Login");
+      });
+  };
+
+  const GetComments = () => {
+    const ID = localStorage.getItem("ItemCardID");
+    const UserId = localStorage.getItem("Access_Token");
+    axios
+      .get(`https://ideawall-backed.onrender.com/api/v1/Dashboard/comment/page/${ID}/`)
+      .then((res) => {
+        // toast.success(res.data.data);
+        console.log(res.data.data);
+        
+          setComments(res.data.data);
+       
+      })
+      .catch((err) => {
+        toast.error("error occured ! login once again");
+      });
+  };
 
   // Handler to increment likes
   const handleLike = () => {
-    setLikes(likes + 1);
-    toast.success("liked the post")
+    const ID = localStorage.getItem("ItemCardID");
+    const UserId = localStorage.getItem("Access_Token");
+    axios
+      .get(`https://ideawall-backed.onrender.com/api/v1/Dashboard/Like/${ID}/`, {
+        headers: {
+          Authorization: `Bearer ${UserId}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        toast.success(res.data.data);
+        console.log(res);
+
+        GetData();
+      })
+      .catch((err) => {
+        toast.error("error occured ! login once again");
+        router.push("/Login")
+      });
   };
+  useEffect(() => {
+    GetData();
+    GetComments();
+  }, []);
 
   return (
     <div className="flex justify-center flex-col items-center py-0 px-1">
       <div className="w-full md:w-[80%] lg:w-[70%] xl:w-[50%] bg-white rounded-xl border-1 border-gray-300 relative pb-5">
         <img
-          src={IdeaCard.image}
-          alt={IdeaCard.title}
+          src={Data.Hero_Image}
+          alt={Data.Title_of_Idea}
           className="w-full h-80 object-cover rounded-tl-xl rounded-tr-xl mb-6"
         />
         <div className="flex items-center justify-between mb-4 px-4">
           <div className="flex items-center text-xs text-gray-500 gap-2">
             <CalendarRange className="w-3 h-3 text-gray-400 ml-2" />
-            <span className="text-sm text-gray-500">{IdeaCard.date}</span>
+            <span className="text-sm text-gray-500">{Data.date_of_post}</span>
           </div>
           <div className="flex items-center gap-2 ">
             <Tag className="w-4 h-4 text-gray-400" />
-            <span className="text-sm text-gray-500">{IdeaCard.category}</span>
+            <span className="text-sm text-gray-500">{Data.category}</span>
           </div>
         </div>
         <div className="flex items-center justify-between my-3 px-4">
-          <h2 className="text-xl font-semibold mb-2 md:text-2xl">{IdeaCard.title}</h2>
-          <div className="flex items-center space-x-2 cursor-pointer" onClick={handleLike}>
+          <h2 className="text-xl font-semibold mb-2 md:text-2xl">
+            {Data.Title_of_Idea}
+          </h2>
+          <div
+            className="flex items-center space-x-2 cursor-pointer"
+            onClick={handleLike}
+          >
             <Heart className="w-4 h-4 md:h-6 md:w-6 text-red-500" />
             <span className="text-gray-700 font-extralight text-sm md:text-xl">
-              {likes}
+              {Data.no_of_likes}
             </span>
           </div>
         </div>
         <p className="text-gray-600 text-[16px] md:text-xl flex-1 px-4">
-          {IdeaCard.description}
+          {Data.description}
         </p>
 
         <div className="flex items-center justify-between mt-3 px-4">
-          <a
-            href={IdeaCard.website_link}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href={Data.website_link} target="_blank" rel="noopener noreferrer">
             <Button className="w-full bg-[#ECFDF4] text-[#059664]  hover:bg-[#059664] cursor-pointer hover:text-[#ECFDF4]">
               <SquareArrowOutUpRight className="w-4 h-4 " /> Visit Website
             </Button>
           </a>
           <div>
             <Link href={`/Profile`}>
-            <span className="text-[18px] font-sans text-gray-700">
-              {IdeaCard.user.name}
-            </span>
+              <span className="text-[18px] font-sans text-gray-700">
+                {Data.Author}
+              </span>
             </Link>
           </div>
         </div>
-        {/* Comments Section */}
-        <div className="mt-8 px-4">
-          <h3 className="text-lg font-semibold mb-2">Comments</h3>
-          <form className="mt-4 flex gap-2 my-3" onSubmit={handleCommentSubmit}>
-            <input
-              type="text"
-              className="border rounded p-2 text-sm w-[90%] resize-none"
-              rows={2}
-              placeholder="Add a comment..."
-              value={commentText}
-              onChange={handleCommentChange}
-            />
-            <Button
-              className="self-end bg-[#ECFDF4] text-[#059664] w-[10%]  hover:bg-[#059664] cursor-pointer hover:text-[#ECFDF4]"
-              type="submit"
-              disabled={commentText.trim() === ""}
-            >
-              Post
-            </Button>
-          </form>
-          <div className="space-y-3">
-            {comments.map((comment, idx) => (
-              <div key={idx} className="bg-gray-100 rounded p-3">
-                <div className="text-sm font-medium text-gray-800">
-                  {comment.name}
-                </div>
-                <div className="text-gray-600 text-sm">{comment.text}</div>
+        
+          <div className="mt-8 px-4">
+            <h3 className="text-lg font-semibold mb-2">Comments</h3>
+            <form className="mt-4 flex gap-2 my-3">
+              <input
+                type="text"
+                className="border rounded p-2 text-sm w-[90%] resize-none"
+                rows={2}
+                placeholder="Add a comment..."
+                value={commentText}
+                onChange={handleCommentChange}
+              />
+              <div onClick={handleCommentSubmit}>
+                <Button
+            className="self-end bg-[#ECFDF4] text-[#059664] w-full  hover:bg-[#059664] cursor-pointer hover:text-[#ECFDF4]"
+            type="submit"
+            disabled={commentText.trim() === ""}
+                >
+            Post
+                </Button>
               </div>
-            ))}
+            </form>
+            <div className="space-y-3">
+              {Array.isArray(comments) && comments.length > 0 ? (
+                comments.map((com) => (
+            <div key={com.id} className="bg-gray-100 rounded p-3">
+              <div className="text-sm font-medium text-gray-800">
+                {com.user}
+              </div>
+              <div className="text-gray-600 text-sm">{com.text}</div>
+            </div>
+                ))
+              ) : (
+                <div className="text-gray-500 text-sm">No comments yet.</div>
+              )}
+            </div>
           </div>
-        </div>
-      </div>
-      {/* Author Section */}
+              </div>
+              {/* Author Section */}
       <div className="flex items-center w-full md:w-[80%] lg:w-[70%] xl:w-[50%] gap-3 mt-6 px-4 py-2 bg-gray-50 rounded-lg">
         <div className="w-full">
           <h1 className="text-xl mb-2 font-bold font-sans">About the Author</h1>
-      <Link href="/Profile">
-
-          <div className="text-[18px] font-sans text-gray-700 font-semibold">
-            {IdeaCard.user.name}
-          </div>
+          <Link href="/Profile">
+            <div className="text-[18px] font-sans text-gray-700 font-semibold">
+              {Data.Author}
+            </div>
           </Link>
           <div className="flex justify-between w-full ">
             <div className="text-sm text-gray-500">
-              {IdeaCard.Designation_of_author}
+              {Data.designation_of_author}
             </div>
             <div className="flex gap-2 items-center text-sm text-gray-500">
-              <Link href={IdeaCard.website_link} target="_blank" rel="noopener noreferrer">
-              <span className="text-[#059664]">Website</span>
-              </Link>
-              <Link href={IdeaCard.website_link} target="_blank" rel="noopener noreferrer">
+              <a
+                href={Data.website_link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="text-[#059664]">Website</span>
+              </a>
+              <a
+                href={Data.github_link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <span className="text-[#059664]">Github</span>
-              </Link>
+              </a>
             </div>
           </div>
         </div>

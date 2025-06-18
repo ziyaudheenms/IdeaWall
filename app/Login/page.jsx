@@ -1,29 +1,37 @@
 "use client" 
 import { Button } from '@/components/ui/button'
-import React from 'react'
+import React, { useState } from 'react'
 import { LogIn } from 'lucide-react'
 import { toast } from 'sonner'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
 function page() {
-const [form, setForm] = React.useState({ email: '', password: '' });
+const route = useRouter()
 const [loading, setLoading] = React.useState(false);
+const [username ,Setusername] = useState("")
+const [password ,Setpassword] = useState("")
 
-const handleChange = (e) => {
-    setForm({ ...form, [e.target.type]: e.target.value });
-};
+
 
 const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    axios.post('https://ideawall-backed.onrender.com/api/v1/auth/api/token/',{
+        username : username,
+        password : password,
+    }).then((res) => {
+        console.log(res);
+        localStorage.setItem("Access_Token" , res.data.access)
     toast.success("Login successful! Redirecting...");
-    // setLoading(true);
-    // try {
-    //     // Replace '/api/login' with your actual backend endpoint
-    //     const res = await axios.post('/api/login', form);
-    //     // handle success (e.g., redirect, show message)
-    // } catch (err) {
-    //     // handle error (e.g., show error message)
-    // } finally {
-    //     setLoading(false);
-    // }
+    route.back()
+        
+    }).catch((err) => {
+        console.log(err);
+        
+    })
+    setLoading(false)
+
+  
 };
 
 return (
@@ -34,10 +42,12 @@ return (
                 <div className="mb-6">
                     <label className="block mb-2 font-medium">Email</label>
                     <input
-                        type="email"
+                        type="text"
                         name="email"
-                        value={form.email}
-                        onChange={handleChange}
+                        value={username}
+                        onChange={(e) => {
+                            Setusername(e.target.value)
+                        } }
                         placeholder="Enter your email"
                         className="w-full px-4 py-3 border-2  rounded-xl outline-none text-lg  transition"
                     />
@@ -47,8 +57,10 @@ return (
                     <input
                         type="password"
                         name="password"
-                        value={form.password}
-                        onChange={handleChange}
+                        value={password}
+                        onChange={(e) => {
+                            Setpassword(e.target.value)
+                        } }
                         placeholder="Enter your password"
                         className="w-full px-4 py-3 border-2  rounded-xl outline-none text-lg transition"
                     />

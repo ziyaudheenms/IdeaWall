@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
         {/* <NavBarDemo /> */}
         <Navbar />
         {children}
-        <Toaster richColors/>
+         <Toaster richColors/>
       </body>
     </html>
   );
