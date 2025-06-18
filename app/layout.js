@@ -25,7 +25,6 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased p-3`}
       >
         {/* <NavBarDemo /> */}
-        <Navbar />
         {children}
          <Toaster richColors/>
       </body>
