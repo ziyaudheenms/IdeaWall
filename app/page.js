@@ -153,7 +153,7 @@ export default function Home() {
     const UserId = localStorage.getItem("Access_Token");
     axios
       .get(
-        `hhttps://ideawall-backed.onrender.com/api/v1/Dashboard/Like/${ID}/`,
+        `https://ideawall-backed.onrender.com/api/v1/Dashboard/Like/${ID}/`,
         {
           headers: {
             Authorization: `Bearer ${UserId}`,
