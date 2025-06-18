@@ -40,10 +40,10 @@ return (
             <h2 className="text-3xl font-bold text-center mb-8 tracking-wide font-sans">Login</h2>
             <form >
                 <div className="mb-6">
-                    <label className="block mb-2 font-medium">Email</label>
+                    <label className="block mb-2 font-medium">Username</label>
                     <input
                         type="text"
-                        name="email"
+                        name="username"
                         value={username}
                         onChange={(e) => {
                             Setusername(e.target.value)
