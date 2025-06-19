@@ -402,9 +402,15 @@ export default function Home() {
                         : ""}
                     </p>
                     <div className="flex items-center justify-between gap-2 mt-4">
-                      <span className="text-[18px] font-sans text-gray-700">
+                    <div className="flex gap-2 items-center">
+                      <Image src={idea.avatar_of_Author} width={40} height={40} alt="profile image" className="rounded-full border-2 border-[#059946]" />
+                        <div className="flex flex-col gap-0">
+                      <span className="text-[16px] font-sans ">
                         {idea.Author}
                       </span>
+                      <span className="text-sm bottom-1 text-gray-700 italic"> {idea.designation_of_author}</span>
+                      </div>
+                      </div>
                       <div className="flex items-center text-xs text-gray-500 gap-2">
                         <CalendarRange className="w-3 h-3 text-gray-400 ml-2" />
                         <span className="text-xs text-gray-500">
