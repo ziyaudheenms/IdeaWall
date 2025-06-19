@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata = {
   title: "IDEAWALL",
   description: "Place to showcase your products",
+  icons: {
+    icon: '/favicon.ico', // or '/images/favicon-192.png'
+  },
 };
 import { Toaster } from "@/components/ui/sonner"
 
